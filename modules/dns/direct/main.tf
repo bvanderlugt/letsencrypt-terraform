@@ -4,7 +4,7 @@
 
 # This assumes that you have already (out of band) setup AWS as your
 # DNS provider, and created a hosted zone again the main domain, e.g
-# against example.com. This datasource simply looks up the zone details 
+# against example.com. This datasource simply looks up the zone details
 # to use in the creation of the additional sub domain records.
 
 data "aws_route53_zone" "main" {

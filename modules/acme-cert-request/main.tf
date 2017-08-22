@@ -2,6 +2,10 @@
 # Inputs required to request a new cert from ACME provider
 # ----------------------------------------------------------------
 
+provider "aws" {
+  region = "us-west-2"
+}
+
 # Create a certificate
 resource "acme_certificate" "certificate" {
 
@@ -9,14 +13,15 @@ resource "acme_certificate" "certificate" {
   account_key_pem         = "${var.acme_account_key_pem}"
   registration_url        = "${var.acme_account_registration_url}"
   common_name             = "${var.acme_certificate_common_name}"
+  subject_alternative_names = "${var.acme_certificate_subject_alt_names}"
 
   dns_challenge {
     provider = "route53"
 
     # Without this explicit config, the ACME provider (which uses lego
-    # under the covers) will look for environment variables to use. 
+    # under the covers) will look for environment variables to use.
     # These environment variable names happen to overlap with the names
-    # also required by the native Terraform AWS provider, however is not 
+    # also required by the native Terraform AWS provider, however is not
     # guaranteed. You may want to explicitly configure them here if you
     # would like to use different credentials to those used by the main
     # Terraform provider
@@ -24,6 +29,6 @@ resource "acme_certificate" "certificate" {
         AWS_ACCESS_KEY_ID     = "${var.acme_challenge_aws_access_key_id}"
         AWS_SECRET_ACCESS_KEY = "${var.acme_challenge_aws_secret_access_key}"
         AWS_REGION            = "${var.acme_challenge_aws_region}"
-    }    
+    }
   }
 }
